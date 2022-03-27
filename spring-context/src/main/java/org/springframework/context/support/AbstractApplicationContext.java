@@ -530,6 +530,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
+				/**
+				 * 1.完成bean的扫描
+				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
@@ -598,6 +601,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		/**
+		 * 可以在这里添加一些必要属性 在 validateRequiredProperties 校验
+		 */
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:

@@ -1358,4 +1358,12 @@ public abstract class StringUtils {
 		return arrayToDelimitedString(arr, ",");
 	}
 
+	public static void main(String[] args) {
+
+		StringJoiner joiner = new StringJoiner(",","(",")")
+				.add("123").add("234");
+		System.out.println(joiner.toString());
+	}
+
+
 }

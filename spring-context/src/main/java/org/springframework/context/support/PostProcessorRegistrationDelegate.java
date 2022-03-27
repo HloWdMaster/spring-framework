@@ -53,25 +53,45 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
+	/**
+	 * 问题
+	 * 1.顺序能不能变 (api注册 -> 内置,扫描 -> 扫描出来)
+	 * 2. BeanDefinitionRegistryPostProcessor 和 ImportBeanDefinitionRegister 的区别
+	 * 3. priorityOrderedPostProcessors 为什么先是实例化
+	 * 4. processedBeans当中为什么不存api川过来的
+	 * 5. ConfigurationClassPostProcessor 对于bd的修改 如何保证正确
+	 * 6. BeanFactoryPostProcessor 当中为什么不开放注册 bd 有什么问题
+	 *
+	 * @param beanFactory
+	 * @param beanFactoryPostProcessors
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
 		Set<String> processedBeans = new HashSet<>();
 
+		/**
+		 *  DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
+		 *  implements ConfigurableListableBeanFactory, BeanDefinitionRegistry
+		 *  必定会进到这里
+		 */
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
+			// beanFactoryPostProcessors 目前是api注册进的类
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
 							(BeanDefinitionRegistryPostProcessor) postProcessor;
+					// 1.实现了 BeanDefinitionRegistryPostProcessor 接口的都会先执行
 					registryProcessor.postProcessBeanDefinitionRegistry(registry);
 					registryProcessors.add(registryProcessor);
 				}
 				else {
+					// 2.其他的先存起来
 					regularPostProcessors.add(postProcessor);
 				}
 			}
@@ -83,15 +103,23 @@ final class PostProcessorRegistrationDelegate {
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			/**
+			 * 从 beandefinitionMap 中去找 目前存有初始化的5个bd
+			 */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+					// 先实例化 ConfigurationClassPostProcessor
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
 					processedBeans.add(ppName);
 				}
 			}
+			/**
+			 * 排序  order小的在前
+			 */
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
+			// 合并 ????
 			registryProcessors.addAll(currentRegistryProcessors);
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 			currentRegistryProcessors.clear();

@@ -8,9 +8,10 @@ import java.util.Map;
 public interface TMapper {
 
 	@Select("select * from t")
-	List<Map<String, Object>> queryForList();
+	public abstract List<Map<String, Object>> queryForList();
 
 	@Select("select * from t where id =#{id}")
-	Map<String, Object> queryForMap(Integer id);
+	public abstract Map<String, Object> queryForMap(Integer id);
+
 
 }
