@@ -58,6 +58,7 @@ import org.springframework.lang.Nullable;
 public interface BeanPostProcessor {
 
 	/**
+	 * Bean初始化之前的操作 在bean的属性注入完成之后 此时可能是一个半成品的bean
 	 * Apply this {@code BeanPostProcessor} to the given new bean instance <i>before</i> any bean
 	 * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}
 	 * or a custom init-method). The bean will already be populated with property values.
@@ -76,6 +77,7 @@ public interface BeanPostProcessor {
 	}
 
 	/**
+	 * Bean初始化之后  提供了一个在bean创建之后可以替换bean的机会
 	 * Apply this {@code BeanPostProcessor} to the given new bean instance <i>after</i> any bean
 	 * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}
 	 * or a custom init-method). The bean will already be populated with property values.

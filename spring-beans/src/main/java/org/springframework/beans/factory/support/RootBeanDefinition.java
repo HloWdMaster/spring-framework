@@ -121,6 +121,7 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 	@Nullable
 	private Set<Member> externallyManagedConfigMembers;
 
+//	记录执行过的 init 方法
 	@Nullable
 	private Set<String> externallyManagedInitMethods;
 

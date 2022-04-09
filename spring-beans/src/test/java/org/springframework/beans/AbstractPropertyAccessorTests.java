@@ -82,6 +82,7 @@ public abstract class AbstractPropertyAccessorTests {
 
 	@Test
 	public void createWithNullTarget() {
+
 		assertThatIllegalArgumentException().isThrownBy(() -> createAccessor(null));
 	}
 

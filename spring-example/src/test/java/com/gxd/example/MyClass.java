@@ -1,4 +1,4 @@
-package org.springframework.expression.batis;
+package com.gxd.example;
 
 public class MyClass {
 //	@Override

@@ -229,6 +229,7 @@ public abstract class ClassUtils {
 		}
 	}
 
+
 	/**
 	 * Replacement for {@code Class.forName()} that also returns Class instances
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
@@ -284,6 +285,7 @@ public abstract class ClassUtils {
 			return Class.forName(name, false, clToUse);
 		}
 		catch (ClassNotFoundException ex) {
+			// 内部类 com.gxd.example.demo.Outer.Inner 格式矫正后再次尝试获取正确的class
 			int lastDotIndex = name.lastIndexOf(PACKAGE_SEPARATOR);
 			if (lastDotIndex != -1) {
 				String innerClassName =
