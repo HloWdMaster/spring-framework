@@ -1,7 +1,5 @@
 package com.gxd.example.liaoxuefeng.invocation;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
